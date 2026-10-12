@@ -742,6 +742,166 @@
     .gp-talk p{ font-size:0.9rem; }
     .gp-stats b{ font-size:0.9rem; }
   }
+
+  /* ═════ 가이딩 · 키 설정 ═════ */
+  .gk-open{ width:auto !important; padding:0 12px; font-size:0.8rem !important; font-family:'Noto Sans KR', sans-serif; }
+  .gk{ position:fixed; inset:0; z-index:96; display:grid; place-items:center; background:rgba(8,8,9,0.82); padding:16px; }
+  .gk[hidden]{ display:none; }
+  .gk-card{ width:min(620px,100%); max-height:calc(100vh - 32px); overflow:auto; background:#0e0e10; color:#f1f1ee; border:1px solid rgba(255,255,255,0.3); padding:22px 22px 18px; display:flex; flex-direction:column; gap:14px; }
+  .gk .latin{ font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:.2em; color:#8d8d8a; display:block; }
+  .gk-h{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .gk-h b{ font-family:'Noto Serif KR', serif; font-size:1.3rem; }
+  .gk-x{ background:none; border:1px solid rgba(255,255,255,0.35); color:#f1f1ee; width:34px; height:34px; font-size:1.1rem; cursor:pointer; }
+  .gk-tabs{ display:flex; gap:6px; flex-wrap:wrap; }
+  .gk-tabs button{ background:none; border:1px solid rgba(255,255,255,0.35); color:#d9d9d6; font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:.1em; padding:7px 12px; cursor:pointer; }
+  .gk-tabs button[aria-pressed="true"]{ background:#f1f1ee; color:#0e0e10; border-color:#f1f1ee; }
+  .gk-slots{ display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; }
+  .gk-slots.l1{ grid-template-columns:repeat(2, 1fr); }
+  .gk-slots .hand{ grid-column:1 / -1; font-size:0.74rem; color:#8d8d8a; margin-top:4px; }
+  .gk-slots button{ background:#151517; border:1px solid rgba(255,255,255,0.3); color:#f1f1ee; padding:10px 4px 9px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; }
+  .gk-slots button small{ font-size:0.66rem; color:#8d8d8a; letter-spacing:.06em; }
+  .gk-slots button b{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:1.05rem; border:1px solid rgba(255,255,255,0.5); border-bottom-width:3px; border-radius:3px; min-width:42px; padding:3px 8px; }
+  .gk-slots button.wait{ background:#f1f1ee; color:#0e0e10; }
+  .gk-slots button.wait b{ border-color:#0e0e10; animation:gpHot .6s steps(2) infinite; }
+  .gk-slots button.wait small{ color:#0e0e10; }
+  .gk-lbl{ font-size:0.74rem; color:#8d8d8a; margin-bottom:-6px; }
+  .gk-pre{ display:flex; gap:6px; flex-wrap:wrap; }
+  .gk-pre button{ background:none; border:1px solid rgba(255,255,255,0.35); color:#d9d9d6; font-family:'IBM Plex Mono', monospace; font-size:0.74rem; padding:7px 12px; cursor:pointer; }
+  .gk-pre button[aria-pressed="true"]{ border-color:#f1f1ee; color:#f1f1ee; box-shadow:inset 0 -2px 0 #f1f1ee; }
+  .gk-msg{ margin:0; font-size:0.84rem; color:#cfcfcc; line-height:1.7; min-height:2.9em; }
+  .gk-btns{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .gk-btns button{ background:#f1f1ee; color:#0e0e10; border:1px solid #f1f1ee; font-family:'Noto Sans KR', sans-serif; font-weight:700; font-size:0.9rem; padding:11px; cursor:pointer; }
+  .gk-btns button.ghost{ background:none; color:#f1f1ee; border-color:rgba(255,255,255,0.45); }
+  @media (max-width:520px){ .gk-slots button b{ min-width:34px; font-size:0.95rem; } .gk-card{ padding:18px 14px 14px; } }
+  .gp{ -webkit-touch-callout:none; }
+  /* ═════ 반응형 보정 (전 기기) ═════ */
+  html, body{ max-width:100%; overflow-x:hidden; }
+  img{ max-width:100%; }
+  /* 섹션 좌우 여백: #id{padding:120px 0} 가 .wrap 여백을 지우던 문제 */
+  #vTeam, #vProfile, #vFrag, #vLog{ padding-left:clamp(16px,4vw,48px); padding-right:clamp(16px,4vw,48px); }
+  #vTeam p, #vFrag p, #vLog p{ overflow-wrap:anywhere; }
+  /* 뮤즈팀 카드: 등급 표시와 버튼 겹침 */
+  .card .rk{ display:block; width:max-content; margin:12px auto 0; }
+  .card .btn{ display:block; margin:14px auto 0; }
+  /* 대화 화면: 안전 영역 */
+  .vt-ui{ padding-bottom:calc(22px + env(safe-area-inset-bottom)); }
+  @media (max-width:760px){ .vt-ui{ padding-bottom:calc(12px + env(safe-area-inset-bottom)); } }
+  /* 헤더: 좁은 화면 */
+  .hdr{ padding-left:max(10px, env(safe-area-inset-left)); padding-right:max(8px, env(safe-area-inset-right)); }
+  @media (max-width:420px){
+    .hdr-brand .b2{ display:none; }
+    .hdr-tabs button{ padding:0 8px; font-size:0.76rem; }
+  }
+  @media (max-width:340px){
+    .hdr-tabs button{ padding:0 6px; font-size:0.72rem; }
+  }
+  /* 가이딩 선택 화면 */
+  @media (max-width:860px){
+    .gd-diff{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); }
+    .gd-diff button{ min-width:0; padding:8px 8px; }
+    .gd-start{ align-self:stretch; }
+    .gd-info{ max-width:none; }
+    .gd-set{ row-gap:8px; }
+  }
+  @media (max-width:360px){
+    .gd-partner button{ padding-right:8px; font-size:0.78rem; }
+    .gd-partner img{ width:28px; height:28px; }
+    .gd-tracks .tt b{ font-size:0.92rem; }
+  }
+  /* 플레이 화면: 안전 영역·낮은 화면 */
+  .gp-top{ padding-top:max(10px, env(safe-area-inset-top)); }
+  .gp-talk{ bottom:max(14px, env(safe-area-inset-bottom)); }
+  @media (max-height:520px){
+    .gp-top{ padding-top:8px; padding-bottom:8px; gap:10px; }
+    .gp-song span:last-child, .gp-ero .latin{ display:none; }
+    .gp-combo{ top:6%; }
+    .gp-combo b{ font-size:2rem; }
+    .gp-ready{ top:12%; gap:8px; }
+    .gp-ready b{ font-size:1.8rem; }
+    .gp-talk img{ width:44px; height:44px; }
+    .gp-talk p{ font-size:0.84rem; line-height:1.45; }
+    .gp-talk div{ padding:6px 10px 8px; }
+    .gp-card{ padding:14px 16px; }
+    .gp-rank{ font-size:3rem; margin:4px 0; }
+    .gp-stats{ margin:8px 0; }
+    .gp-say{ padding:6px; margin-bottom:8px; }
+    .gp-say img{ width:40px; height:40px; }
+    .gp-res{ overflow:auto; place-items:start center; }
+  }
+  @media (max-width:420px){
+    .gp-stats{ grid-template-columns:repeat(2,1fr); }
+    .gp-card{ padding:18px 14px; }
+  }
+  .gp-tags{ flex-wrap:wrap; }
+  .gp-tags span{ white-space:nowrap; }
+  .gp-song .latin{ display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gp-res{ overflow:auto; }
+  .gd-set .gs{ display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
+  @media (max-width:360px){ .gd-diff button small{ font-size:0.58rem; } .gd-set .sep{ width:8px; } }
+  /* 대화 화면 · 세로 폰: 둥근 버튼을 위쪽 가로줄로 옮겨 선택지와 겹치지 않게 */
+  @media (max-width:760px){
+    .vt-fab{ top:60px !important; right:10px; bottom:auto; flex-direction:row; gap:6px; }
+    .fab{ width:34px; height:34px; font-size:0.82rem; }
+    .vt-char{ top:100px; }
+  }
+  /* 대화 화면 · 가로 폰(낮은 화면): 캐릭터 왼쪽, 선택지·대화창 오른쪽 */
+  @media (max-height:520px) and (orientation:landscape){
+    .vt-top{ top:6px !important; left:10px; right:10px; }
+    .vt-title{ padding:4px 10px; }
+    .vt-title .latin{ display:none; }
+    .vt-title b{ font-size:0.84rem; }
+    .vt-side button{ width:32px; height:32px; }
+    .vt-mark{ display:none; }
+    .vt-char{ left:0; transform:none; width:38vw; top:44px; bottom:0; }
+    .vt-fab{ top:6px !important; right:auto; left:calc(50% - 60px); bottom:auto; flex-direction:row; gap:6px; }
+    .fab{ width:32px; height:32px; font-size:0.8rem; }
+    .vt-ui{ left:36vw; right:0; padding:0 12px calc(8px + env(safe-area-inset-bottom)); gap:6px; align-items:stretch; }
+    .choices{ position:static; width:100%; max-width:none; gap:5px; }
+    .choice{ padding:6px 10px; font-size:0.8rem; grid-template-columns:22px 1fr; }
+    .dbox{ width:100%; min-height:0; padding:18px 14px 16px; }
+    .dname{ top:-12px; font-size:0.82rem; padding:3px 12px; }
+    .dtext{ font-size:0.86rem; line-height:1.6; min-height:0; }
+    .dnext{ bottom:4px; }
+  }
+  /* 플레이 · 낮은 화면(가로 폰) */
+  @media (max-height:520px){
+    .gp-top{ grid-template-columns:1fr minmax(110px,220px) auto auto !important; }
+    .gp-ero{ grid-column:auto !important; order:0 !important; }
+    .gp-score b{ font-size:1.05rem; }
+    .gp-pause{ width:34px; height:34px; }
+    .gp-combo{ left:14px; right:auto; text-align:left; }
+    .gp-res{ padding:8px; }
+  }
+  @media (max-height:520px) and (min-width:600px){
+    .gp-card{ width:min(780px,100%); }
+    .gp-stats{ grid-template-columns:repeat(8,1fr); }
+    .gp-rank{ font-size:2.6rem; }
+  }
+  /* 플레이 · 작은 세로 폰: 결과 카드 압축 */
+  @media (max-height:700px) and (orientation:portrait){
+    .gp-res{ place-items:start center; }
+    .gp-card{ padding:14px 14px; }
+    .gp-rank{ font-size:3rem; margin:6px 0 4px; }
+    .gp-stats{ margin:10px 0; gap:4px; }
+    .gp-stats div{ padding-top:5px; }
+    .gp-say{ margin-bottom:10px; padding:6px; }
+    .gp-say img{ width:42px; height:42px; }
+    .gp-say p{ font-size:0.86rem; line-height:1.5; }
+  }
+  /* 헤더: 태블릿·좁은 데스크톱 */
+  .hdr-tabs button{ white-space:nowrap; }
+  .hdr-tabs{ min-width:0; }
+  @media (max-width:1100px){
+    .hdr-brand .b3{ display:none; }
+    .hdr-tabs button{ padding:0 12px; }
+    .hdr-tabs button i{ display:none; }
+    .hdr-tabs button[aria-current="true"]::after{ left:8px; right:8px; }
+  }
+  @media (max-width:900px){
+    .hdr-user{ display:none; }
+    .hdr-tabs{ overflow-x:auto; scrollbar-width:none; }
+    .hdr-tabs::-webkit-scrollbar{ display:none; }
+  }
 </style>
 </head>
 <body>
@@ -999,8 +1159,8 @@
         <div class="gd-row"><span class="gd-lbl">난이도</span><div class="gd-diff" id="gdDiff"></div></div>
         <div class="gd-row"><span class="gd-lbl">함께할 가이드</span><div class="gd-partner" id="gdPartner"></div></div>
         <div class="gd-row"><span class="gd-lbl">설정</span>
-          <div class="gd-set">노트 속도 <button type="button" data-set="spd" data-d="-1" aria-label="속도 낮추기">−</button><b id="gdSpd">5</b><button type="button" data-set="spd" data-d="1" aria-label="속도 높이기">+</button>
-            <span class="sep"></span>싱크 <button type="button" data-set="off" data-d="-10" aria-label="싱크 앞당기기">−</button><b id="gdOff">0ms</b><button type="button" data-set="off" data-d="10" aria-label="싱크 늦추기">+</button></div>
+          <div class="gd-set"><span class="gs">노트 속도 <button type="button" data-set="spd" data-d="-1" aria-label="속도 낮추기">−</button><b id="gdSpd">5</b><button type="button" data-set="spd" data-d="1" aria-label="속도 높이기">+</button></span>
+            <span class="sep"></span><span class="gs">싱크 <button type="button" data-set="off" data-d="-10" aria-label="싱크 앞당기기">−</button><b id="gdOff">0ms</b><button type="button" data-set="off" data-d="10" aria-label="싱크 늦추기">+</button></span><span class="sep"></span><button type="button" class="gk-open" id="gkOpen">⌨ 키 설정</button></div>
         </div>
         <div class="gd-best" id="gdBest"></div>
         <button class="gd-start" type="button" id="gdStart">가이딩 시작</button>
@@ -1009,6 +1169,19 @@
     </div>
   </div>
 </section>
+
+<!-- ═════ 가이딩 · 키 설정 ═════ -->
+<div class="gk" id="gk" hidden role="dialog" aria-label="키 설정">
+  <div class="gk-card">
+    <div class="gk-h"><div><span class="latin">KEY BINDING</span><b>키 설정</b></div><button type="button" class="gk-x" id="gkClose" aria-label="닫기">×</button></div>
+    <div class="gk-tabs" id="gkTabs"></div>
+    <div class="gk-slots" id="gkSlots"></div>
+    <div class="gk-lbl">빠른 설정</div>
+    <div class="gk-pre" id="gkPre"></div>
+    <p class="gk-msg" id="gkMsg"></p>
+    <div class="gk-btns"><button type="button" class="ghost" id="gkReset">기본값으로</button><button type="button" id="gkDone">완료</button></div>
+  </div>
+</div>
 
 <!-- ═════ 가이딩 · 플레이 ═════ -->
 <div class="gp" id="gp" hidden role="dialog" aria-label="가이딩 플레이">
@@ -2910,12 +3083,14 @@ function gdRender(){
     '<button type="button" data-p="'+c.id+'" aria-pressed="'+(c.id === gd.partner)+'"><img src="'+c.img+'" alt="">'+c.name+'</button>').join('');
   $$('#gdPartner button').forEach(b => b.addEventListener('click', () => { gd.partner = b.dataset.p; store.set('themis-gpartner', gd.partner); gdRender(); }));
   const K = c => '<kbd>' + c + '</kbd>';
-  const LN = typeof gpLaneCount === 'function' ? gpLaneCount() : 1;
-  $('#gdKeys').innerHTML = (GP_TOUCH || LN === 1
-      ? (GP_TOUCH ? '<b>화면 탭</b>' : K('SPACE') + ' 또는 <b>화면 탭</b>') + ' — 노트가 원에 닿는 순간 누르기'
-      : LN === 4 ? K('←') + K('↓') + K('↑') + K('→') + ' 방향키 4레인 — 같은 방향 레인의 노트가 원에 닿을 때 누르기 (D F J K도 가능)'
-      : '양손 8레인 — 왼손 ' + K('A') + K('S') + K('W') + K('D') + ' · 오른손 ' + K('←') + K('↓') + K('↑') + K('→'))
+  const LN = gpLaneCount();
+  $('#gdKeys').innerHTML = (GP_TOUCH
+      ? (LN === 1 ? '<b>화면 탭</b> — 노트가 원에 닿는 순간 탭' : '<b>' + LN + '레인 탭</b> — 노트가 떨어지는 줄을 원에 닿는 순간 탭 (여러 손가락 동시 가능)')
+      : LN === 1 ? gkHint(1, true) + ' 또는 <b>화면 클릭</b> — 노트가 원에 닿는 순간 누르기'
+      : LN === 4 ? gkHint(4, true) + ' 4레인 — 같은 방향 레인의 노트가 원에 닿을 때 누르기'
+      : '양손 8레인 — ' + gkHint(8, true))
     + '<br>긴 노트는 끝날 때까지 <b>누르고 있기</b>' + (GP_TOUCH ? '' : ' · ' + K('ESC') + ' 일시정지');
+  $('#gkOpen').hidden = GP_TOUCH;
   $('#gdSpd').textContent = gd.spd;
   $('#gdOff').textContent = (gd.off > 0 ? '+' : '') + gd.off + 'ms';
   const r = gd.best[t.id] && gd.best[t.id][gd.diff];
@@ -3008,19 +3183,84 @@ function gpSay(ev, force){
 
 /* ── 플레이 ── */
 const W_JUDGE = { P:1, Gr:0.75, G:0.4, M:0 }, WIN = { P:0.045, Gr:0.09, G:0.135 };
-/* 레인 수: EASY 1 (SPACE) · NORMAL 4 (방향키) · HARD 8 (WASD + 방향키) / 터치 기기는 항상 1레인 탭 */
+/* 레인 수: EASY 1 · NORMAL 4 · HARD 8 — 키보드는 키 설정대로, 터치 기기는 레인을 직접 탭 */
 const GP_TOUCH = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 const GP_ARROW = ['←', '↓', '↑', '→'];
-const GP_KEYMAP = {
-  1: { Space:0, ArrowLeft:0, ArrowDown:0, ArrowUp:0, ArrowRight:0, KeyF:0, KeyJ:0 },
-  4: { ArrowLeft:0, ArrowDown:1, ArrowUp:2, ArrowRight:3, KeyD:0, KeyF:1, KeyJ:2, KeyK:3 },
-  8: { KeyA:0, KeyS:1, KeyW:2, KeyD:3, ArrowLeft:4, ArrowDown:5, ArrowUp:6, ArrowRight:7 }
+/* 키 설정: 레인 수별 키 목록 (e.code 기준) */
+const GK_DEF = { 1:['Space','KeyJ'], 4:['ArrowLeft','ArrowDown','ArrowUp','ArrowRight'], 8:['KeyA','KeyS','KeyW','KeyD','ArrowLeft','ArrowDown','ArrowUp','ArrowRight'] };
+const GK_PRESET = {
+  1: [['SPACE · J', ['Space','KeyJ']], ['F · J', ['KeyF','KeyJ']], ['Z · X', ['KeyZ','KeyX']]],
+  4: [['← ↓ ↑ →', ['ArrowLeft','ArrowDown','ArrowUp','ArrowRight']], ['H J K L', ['KeyH','KeyJ','KeyK','KeyL']], ['D F J K', ['KeyD','KeyF','KeyJ','KeyK']], ['A S W D', ['KeyA','KeyS','KeyW','KeyD']]],
+  8: [['WASD + ← ↓ ↑ →', GK_DEF[8]], ['WASD + HJKL', ['KeyA','KeyS','KeyW','KeyD','KeyH','KeyJ','KeyK','KeyL']], ['ASDF + JKL;', ['KeyA','KeyS','KeyD','KeyF','KeyJ','KeyK','KeyL','Semicolon']], ['SDF␣ + ␣JKL', ['KeyS','KeyD','KeyF','Space','KeyJ','KeyK','KeyL','Semicolon']]]
 };
-const GP_LABEL = { 4:['←','↓','↑','→'], 8:['A','S','W','D','←','↓','↑','→'] };
+let gkeys = (() => {
+  const v = store.get('themis-keys', null), out = {};
+  [1, 4, 8].forEach(L => { out[L] = (v && Array.isArray(v[L]) && v[L].length === GK_DEF[L].length) ? v[L].slice() : GK_DEF[L].slice(); });
+  return out;
+})();
+const GK_SYM = { Space:'SPACE', ArrowLeft:'←', ArrowDown:'↓', ArrowUp:'↑', ArrowRight:'→', Semicolon:';', Quote:"'", Comma:',', Period:'.', Slash:'/', Backslash:'\\',
+  BracketLeft:'[', BracketRight:']', Minus:'-', Equal:'=', Backquote:'`', ShiftLeft:'L⇧', ShiftRight:'R⇧', ControlLeft:'LCtrl', ControlRight:'RCtrl', AltLeft:'LAlt', AltRight:'RAlt', Enter:'↵', Backspace:'⌫', CapsLock:'Caps' };
+function gkLabel(code){
+  if(!code) return '—';
+  if(GK_SYM[code]) return GK_SYM[code];
+  if(/^Key[A-Z]$/.test(code)) return code.slice(3);
+  if(/^Digit\d$/.test(code)) return code.slice(5);
+  if(/^Numpad/.test(code)) return 'N' + code.slice(6).replace('Decimal', '.').replace('Add', '+').replace('Subtract', '-').replace('Multiply', '*').replace('Divide', '/');
+  return code;
+}
+function gkMap(L){ const m = {}; gkeys[L].forEach((c, i) => { if(c) m[c] = L === 1 ? 0 : i; }); return m; }
+function gkLabels(L){ return gkeys[L].map(gkLabel); }
+const gk = { L:4, wait:-1 };
+function gkOpen(){ gk.L = gpLaneCount(); gk.wait = -1; gkRender(); $('#gk').hidden = false; }
+function gkClose(){ gk.wait = -1; $('#gk').hidden = true; gdRender(); }
+function gkRender(){
+  const L = gk.L;
+  $('#gkTabs').innerHTML = [[1,'EASY · 1레인'],[4,'NORMAL · 4레인'],[8,'HARD · 8레인']].map(([n, t]) =>
+    '<button type="button" data-l="'+n+'" aria-pressed="'+(n === L)+'">'+t+'</button>').join('');
+  $$('#gkTabs button').forEach(b => b.addEventListener('click', () => { gk.L = Number(b.dataset.l); gk.wait = -1; gkRender(); }));
+  const cap = i => L === 1 ? '키 ' + (i + 1) : (L === 8 ? (i < 4 ? '왼손 ' : '오른손 ') : '레인 ' + (i + 1) + ' ') + (L > 1 ? GP_ARROW[i % 4] : '');
+  let h = '';
+  gkeys[L].forEach((c, i) => {
+    if(L === 8 && (i === 0 || i === 4)) h += '<div class="hand">' + (i === 0 ? '왼손 · 위쪽 4줄' : '오른손 · 아래쪽 4줄') + '</div>';
+    h += '<button type="button" data-i="'+i+'" class="'+(gk.wait === i ? 'wait' : '')+'"><small>'+cap(i)+'</small><b>'+(gk.wait === i ? '?' : esc(gkLabel(c)))+'</b></button>';
+  });
+  const box = $('#gkSlots'); box.className = 'gk-slots' + (L === 1 ? ' l1' : ''); box.innerHTML = h;
+  $$('#gkSlots button').forEach(b => b.addEventListener('click', () => { gk.wait = Number(b.dataset.i); gkRender(); }));
+  const curKey = gkeys[L].join(',');
+  $('#gkPre').innerHTML = GK_PRESET[L].map(([t, ks], i) => '<button type="button" data-p="'+i+'" aria-pressed="'+(ks.join(',') === curKey)+'">'+esc(t)+'</button>').join('');
+  $$('#gkPre button').forEach(b => b.addEventListener('click', () => { gkeys[L] = GK_PRESET[L][Number(b.dataset.p)][1].slice(); gk.wait = -1; gkSave(); gkRender(); }));
+  $('#gkMsg').textContent = gk.wait >= 0 ? '지금 누르는 키가 「' + cap(gk.wait).trim() + '」 칸에 들어갑니다. 취소는 ESC.'
+    : (L === 1 ? '1레인은 두 키 중 아무거나 눌러도 됩니다. ' : '') + '바꿀 칸을 누른 뒤 원하는 키를 누르세요. 한/영 상태와 상관없이 자판 위치로 인식합니다. 이미 쓰던 키를 넣으면 두 칸이 서로 바뀝니다.';
+}
+function gkSave(){ store.set('themis-keys', gkeys); }
+document.addEventListener('keydown', (e) => {
+  if($('#gk').hidden) return;
+  if(gk.wait < 0){ if(e.key === 'Escape'){ e.preventDefault(); gkClose(); } return; }
+  e.preventDefault(); e.stopPropagation();
+  if(e.code === 'Escape' || e.key === 'Escape'){ gk.wait = -1; gkRender(); return; }
+  if(!e.code || e.code === 'Tab' || /^(Meta|OS)/.test(e.code)) return;
+  const L = gk.L, arr = gkeys[L], i = gk.wait, j = arr.indexOf(e.code);
+  if(j >= 0 && j !== i) arr[j] = arr[i];
+  arr[i] = e.code;
+  gk.wait = -1; gkSave(); gkRender();
+}, true);
+$('#gkOpen').addEventListener('click', gkOpen);
+$('#gkClose').addEventListener('click', gkClose);
+$('#gkDone').addEventListener('click', gkClose);
+$('#gkReset').addEventListener('click', () => { gkeys[gk.L] = GK_DEF[gk.L].slice(); gk.wait = -1; gkSave(); gkRender(); });
+$('#gk').addEventListener('click', (e) => { if(e.target.id === 'gk') gkClose(); });
+/* 화면 안내용 키 문구 */
+function gkHint(L, html){
+  const K = c => html ? '<kbd>' + esc(c) + '</kbd>' : c;
+  const lb = gkLabels(L), j = html ? '' : ' ';
+  if(L === 1) return lb.map(K).join(html ? ' 또는 ' : ' / ');
+  if(L === 4) return lb.map(K).join(j);
+  return '왼손 ' + lb.slice(0, 4).map(K).join(j) + ' · 오른손 ' + lb.slice(4).map(K).join(j);
+}
 const gp = { on:false, paused:false, done:false, tr:null, notes:[], beats:[], src:null, gain:null, t0:0, lat:0, idx:0, L:1,
   hold:[], down:[], keys:new Set(), ptrs:new Map(), st:{}, combo:0, maxc:0, ero:15, wsum:0, judged:0, total:0, lastT:0,
   ev:{}, talkAt:0, talkTo:0, raf:0, flash:[], fx:[], missRun:0, idleAt:0, geo:null };
-function gpLaneCount(diff){ return GP_TOUCH ? 1 : { easy:1, normal:4, hard:8 }[diff || gd.diff]; }
+function gpLaneCount(diff){ return { easy:1, normal:4, hard:8 }[diff || gd.diff]; }
 function gpTime(){ return rgAC ? rgAC.currentTime - gp.t0 - gp.lat - gd.off / 1000 : 0; }
 function gpTravel(){ return (2.5 - gd.spd * 0.2); }
 function gpSize(){
@@ -3089,18 +3329,15 @@ async function gpStart(){
   gp.src.start(gp.t0);
   gp.lat = Math.min(0.15, (ac.outputLatency || 0) + (ac.baseLatency || 0));
   $('#gpReady').hidden = false; $('#gpReadyT').textContent = 'READY';
-  if(L === 4){
-    $('#gpReadyK').innerHTML = GP_ARROW.map(c => '<kbd>' + c + '</kbd>').join(' ');
-    $('#gpReadyS').textContent = '방향키로 같은 방향 레인을 누르세요 (D F J K도 가능) · 긴 노트는 누르고 있기';
-    $('#gpKeyFoot').textContent = '← ↓ ↑ → · D F J K · ESC';
-  } else if(L === 8){
-    $('#gpReadyK').innerHTML = ['A','S','W','D'].map(c => '<kbd>' + c + '</kbd>').join(' ') + ' &nbsp;+&nbsp; ' + GP_ARROW.map(c => '<kbd>' + c + '</kbd>').join(' ');
-    $('#gpReadyS').textContent = '양손 8레인: 위쪽 4줄은 왼손 A S W D, 아래쪽 4줄은 오른손 ← ↓ ↑ → · 긴 노트는 누르고 있기';
-    $('#gpKeyFoot').textContent = 'A S W D · ← ↓ ↑ → · ESC';
+  gp.kmap = gkMap(L);
+  if(GP_TOUCH){
+    $('#gpReadyK').innerHTML = '<kbd>TAP</kbd>';
+    $('#gpReadyS').textContent = (L === 1 ? '화면 아무 곳이나 탭하세요' : '노트가 떨어지는 줄을 탭하세요 · 여러 손가락 동시에 가능') + ' · 긴 노트는 누르고 있기';
+    $('#gpKeyFoot').textContent = 'TAP';
   } else {
-    $('#gpReadyK').innerHTML = '<kbd>SPACE</kbd>';
-    $('#gpReadyS').textContent = GP_TOUCH ? '화면을 탭하세요 · 긴 노트는 누르고 있기' : '스페이스바 또는 화면을 누르세요 · 긴 노트는 누르고 있기';
-    $('#gpKeyFoot').textContent = GP_TOUCH ? 'TAP' : 'SPACE · TAP · ESC';
+    $('#gpReadyK').innerHTML = gkHint(L, true);
+    $('#gpReadyS').textContent = (L === 1 ? '키 또는 화면을 누르세요' : L === 4 ? '같은 방향 레인의 키를 누르세요' : '양손 8레인: 위쪽 4줄은 왼손, 아래쪽 4줄은 오른손') + ' · 긴 노트는 누르고 있기 · 키 설정에서 바꿀 수 있어요';
+    $('#gpKeyFoot').textContent = gkHint(L, false) + ' · ESC';
   }
   $('#gpCombo').classList.remove('on');
   gpHud();
@@ -3218,10 +3455,13 @@ function gpArrow(x, cx, cy, r, lane, col){
 }
 function gpDraw(t){
   const cv = $('#gpCv'), x = cv.getContext('2d'), W = cv.clientWidth, H = cv.clientHeight;
-  const V = H > W * 1.1;   /* 세로 화면: 위에서 떨어지는 레인 */
-  const L = gp.L, LS = L === 1 ? 60 : L === 4 ? (V ? Math.min(70, W / 5) : Math.min(60, H / 8)) : (V ? Math.min(56, W / 9.5) : Math.min(50, H / 10.5));
+  const L = gp.L, TW = GP_TOUCH && L > 1;
+  const V = H > W * 1.1 || TW;   /* 세로 화면·터치 다중레인: 위에서 떨어지는 레인 */
+  const LS = L === 1 ? 60
+    : TW ? Math.min(L === 4 ? 110 : 80, (W - 16) / (L + (L === 8 ? 0.5 : 0)))
+    : L === 4 ? (V ? Math.min(70, W / 5) : Math.min(60, H / 8)) : (V ? Math.min(56, W / 9.5) : Math.min(50, H / 10.5));
   const HG = L === 8 ? LS * 0.5 : 0;   /* 왼손·오른손 레인 사이 틈 */
-  const cy = V ? H * 0.7 : H * 0.56, hx = V ? W / 2 : Math.max(64, W * 0.17), amp = Math.min(H * 0.18, 110);
+  const cy = V ? H * (TW ? 0.78 : 0.7) : H * 0.56, hx = V ? W / 2 : Math.max(64, W * 0.17), amp = Math.min(H * 0.18, 110);
   const travel = gpTravel(), spd = V ? (cy + 40) / travel : (W - hx + 40) / travel, now = performance.now() / 1000;
   const off = l => L === 1 ? 0 : (l - (L - 1) / 2) * LS + (L === 8 ? (l < 4 ? -HG / 2 : HG / 2) : 0);
   const hit = l => V ? [hx + off(l), cy] : [hx, cy + off(l)];
@@ -3280,7 +3520,8 @@ function gpDraw(t){
     if(L > 1){
       gpArrow(x, px, py, R * 0.42, l % 4, 'rgba(241,241,238,' + (0.35 + bp * 0.3) + ')');
       x.fillStyle = 'rgba(241,241,238,0.55)'; x.font = '600 11px "IBM Plex Mono", monospace'; x.textAlign = 'center'; x.textBaseline = 'middle';
-      if(V) x.fillText(GP_LABEL[L][l], px, py + R + 14); else x.fillText(GP_LABEL[L][l], px - R - 16, py);
+      const lab = gkLabel(gkeys[L][l]);
+      if(!GP_TOUCH){ if(V) x.fillText(lab, px, py + R + 14); else x.fillText(lab, px - R - 16, py); }
     }
   }
   /* 히트 이펙트 */
@@ -3382,12 +3623,12 @@ $('#gpStage').addEventListener('pointerdown', (e) => {
   const l = gp.ptrs.get(e.pointerId); gp.ptrs.delete(e.pointerId); gpUp(l);
 }));
 /* 키보드: e.code 기준이라 한/영 입력 상태와 상관없이 동작 */
-function gpKeyLane(e){ const m = GP_KEYMAP[gp.L] || GP_KEYMAP[1]; return e.code in m ? m[e.code] : -1; }
-const GP_ALLKEYS = new Set(['Space','ArrowLeft','ArrowDown','ArrowUp','ArrowRight','KeyA','KeyS','KeyW','KeyD','KeyF','KeyJ','KeyK']);
+function gpKeyLane(e){ const m = gp.kmap || gkMap(gp.L); return e.code in m ? m[e.code] : -1; }
+const GP_NOSCROLL = new Set(['Space','ArrowLeft','ArrowDown','ArrowUp','ArrowRight']);
 document.addEventListener('keydown', (e) => {
   if($('#gp').hidden) return;
   if(e.key === 'Escape'){ e.preventDefault(); if(!gp.done) gpPauseSet(!gp.paused); return; }
-  if(!GP_ALLKEYS.has(e.code)) return;
+  if(gpKeyLane(e) < 0 && !GP_NOSCROLL.has(e.code)) return;
   e.preventDefault(); e.stopPropagation();
   const l = gpKeyLane(e);
   if(l < 0 || e.repeat || gp.paused || gp.done || gp.keys.has(e.code)) return;
