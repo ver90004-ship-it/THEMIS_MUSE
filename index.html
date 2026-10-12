@@ -958,6 +958,15 @@
   input, textarea, .frag p, .pf-bio, .pf-quote, .lg-row, .log-item{ -webkit-user-select:text; user-select:text; }
   img{ -webkit-user-drag:none; user-drag:none; -webkit-touch-callout:none; }
   ::selection{ background:rgba(140,140,136,0.35); color:inherit; }
+
+  /* 세로 레인(모바일): 대사창을 위쪽으로 — 판정선·노트 가리지 않게 */
+  .gp.vert .gp-talk{ top:10px; bottom:auto; left:10px; right:10px; max-width:none; align-items:center; gap:8px; opacity:.94; }
+  .gp.vert .gp-talk img{ width:40px; height:40px; }
+  .gp.vert .gp-talk div{ flex:1; min-width:0; padding:6px 10px 7px; }
+  .gp.vert .gp-talk b{ font-size:0.68rem; margin-bottom:1px; }
+  .gp.vert .gp-talk p{ font-size:0.86rem; line-height:1.45; }
+  .gp.vert .gp-combo{ top:76px; }
+  .gp.vert .gp-ready{ top:22%; }
 </style>
 </head>
 <body>
@@ -1216,7 +1225,7 @@
         <div class="gd-row"><span class="gd-lbl">함께할 가이드</span><div class="gd-partner" id="gdPartner"></div></div>
         <div class="gd-row"><span class="gd-lbl">설정</span>
           <div class="gd-set"><span class="gs">노트 속도 <button type="button" data-set="spd" data-d="-1" aria-label="속도 낮추기">−</button><b id="gdSpd">5</b><button type="button" data-set="spd" data-d="1" aria-label="속도 높이기">+</button></span>
-            <span class="sep"></span><span class="gs">싱크 <button type="button" data-set="off" data-d="-10" aria-label="싱크 앞당기기">−</button><b id="gdOff">0ms</b><button type="button" data-set="off" data-d="10" aria-label="싱크 늦추기">+</button></span><span class="sep"></span><button type="button" class="gk-open" id="gkOpen">⌨ 키 설정</button><span class="gs gd-inp" id="gdInp">조작 <button type="button" data-inp="auto">자동</button><button type="button" data-inp="touch">터치</button><button type="button" data-inp="key">키보드</button></span></div>
+            <span class="sep"></span><span class="gs">싱크 <button type="button" data-set="off" data-d="-10" aria-label="싱크 앞당기기">−</button><b id="gdOff">0ms</b><button type="button" data-set="off" data-d="10" aria-label="싱크 늦추기">+</button></span><span class="sep"></span><button type="button" class="gk-open" id="gkOpen">⌨ 키 설정</button><span class="gs gd-inp" id="gdVib">진동 <button type="button" data-vib="1">켜기</button><button type="button" data-vib="0">끄기</button></span><span class="sep"></span><span class="gs gd-inp" id="gdInp">조작 <button type="button" data-inp="auto">자동</button><button type="button" data-inp="touch">터치</button><button type="button" data-inp="key">키보드</button></span></div>
         </div>
         <div class="gd-best" id="gdBest"></div>
         <button class="gd-start" type="button" id="gdStart">가이딩 시작</button>
@@ -3148,6 +3157,8 @@ function gdRender(){
     + '<br>긴 노트는 끝날 때까지 <b>누르고 있기</b>' + (GP_TOUCH ? '' : ' · ' + K('ESC') + ' 일시정지');
   $('#gkOpen').hidden = GP_TOUCH;
   $$('#gdInp button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.inp === gpInput)));
+  $('#gdVib').hidden = !GP_CAN_VIB;
+  $$('#gdVib button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.vib === '1') === gpVib)));
   $('#gdSpd').textContent = gd.spd;
   $('#gdOff').textContent = (gd.off > 0 ? '+' : '') + gd.off + 'ms';
   const r = gd.best[t.id] && gd.best[t.id][gd.diff];
@@ -3168,6 +3179,10 @@ function gdSelect(i, gesture){
   });
 }
 $$('#gdInp button').forEach(b => b.addEventListener('click', () => { gpSetInput(b.dataset.inp); gdRender(); }));
+$$('#gdVib button').forEach(b => b.addEventListener('click', () => {
+  gpVib = b.dataset.vib === '1'; store.set('themis-vib', gpVib); gdRender();
+  if(gpVib) gpBuzz(30);   /* 켤 때 한 번 울려서 확인 */
+}));
 $$('.gd-set [data-set]').forEach(b => b.addEventListener('click', () => {
   const d = Number(b.dataset.d);
   if(b.dataset.set === 'spd'){ gd.spd = Math.max(1, Math.min(10, gd.spd + d)); store.set('themis-spd', gd.spd); }
@@ -3248,6 +3263,10 @@ const GP_TOUCH_AUTO = (navigator.maxTouchPoints || 0) > 0 && (GP_MQ('(any-pointe
   || /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser/i.test(navigator.userAgent) || window.__DEVICE === 'mobile' || window.__DEVICE === 'tablet');
 let gpInput = store.get('themis-input', 'auto');   /* auto | touch | key */
 let GP_TOUCH = gpInput === 'touch' || (gpInput === 'auto' && GP_TOUCH_AUTO);
+/* 진동: 지원 기기(안드로이드 등)에서만, 기본 켜짐 */
+const GP_CAN_VIB = typeof navigator.vibrate === 'function';
+let gpVib = store.get('themis-vib', true);
+function gpBuzz(ms){ if(GP_CAN_VIB && gpVib){ try{ navigator.vibrate(ms); } catch(e){} } }
 function gpSetInput(v){ gpInput = v; store.set('themis-input', v); GP_TOUCH = v === 'touch' || (v === 'auto' && GP_TOUCH_AUTO); }
 /* 자동일 때: 실제로 손가락으로 누르면 터치 모드로 */
 document.addEventListener('pointerdown', (e) => {
@@ -3437,6 +3456,7 @@ function gpApply(k, label, lane){
     if(gp.missRun === 5) gpSay('miss', true);
   } else {
     gp.combo++; gp.missRun = 0; gp.maxc = Math.max(gp.maxc, gp.combo);
+    gpBuzz(k === 'P' ? 16 : 9);
     const l = lane || 0; gp.flash[l] = 1;
     gp.fx.push({ t:performance.now(), k, l });
     const ev = { 25:'c25', 50:'c50', 100:'c100', 200:'c200' }[gp.combo];
@@ -3536,6 +3556,7 @@ function gpDraw(t){
   const at = (dt, l) => V ? [hx + off(l), cy - dt * spd] : [hx + dt * spd, cy + off(l)];
   const half = L > 1 ? LS * L / 2 + HG / 2 : 30;
   gp.geo = { V, L, LS, hx, cy, off };
+  if(gp.vert !== V){ gp.vert = V; $('#gp').classList.toggle('vert', V); }
   x.clearRect(0, 0, W, H);
   /* 센티넬 파장: 침식이 높을수록 거칠다 */
   const rough = gp.ero / 100;
