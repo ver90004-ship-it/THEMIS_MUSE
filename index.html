@@ -941,6 +941,12 @@
   .gd-inp button{ width:auto !important; padding:0 9px; font-size:0.76rem !important; font-family:'Noto Sans KR', sans-serif; margin-left:-1px; }
   .gd-inp button[aria-pressed="true"]{ background:#f1f1ee; color:#0e0e10; border-color:#f1f1ee; }
 
+
+  /* 모바일 터치 시 파란 하이라이트·길게 눌러 선택 끄기 */
+  html{ -webkit-tap-highlight-color:transparent; }
+  *, *::before, *::after{ -webkit-tap-highlight-color:transparent; }
+  #vTitle, .wait, #vScene, .dbox, .vt-ui, .choices, .rg, .gp, .gd-tracks, .fab, .hdr{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  button, [role="button"]{ touch-action:manipulation; }
 </style>
 </head>
 <body>
