@@ -3600,14 +3600,14 @@ function gpDraw(t){
   for(let l = 0; l < L; l++){
     const [px, py] = hit(l);
     x.strokeStyle = 'rgba(241,241,238,0.25)'; x.lineWidth = 1;
-    if(L === 1){ x.beginPath(); x.arc(px, py, 36 + bp * 8, 0, Math.PI * 2); x.stroke(); }
+    if(L === 1){ x.beginPath(); x.arc(px, py, 36, 0, Math.PI * 2); x.stroke(); }
     const pr = R + gp.flash[l] * 7;
     x.strokeStyle = '#f1f1ee'; x.lineWidth = 2.5;
     x.beginPath(); x.arc(px, py, pr, 0, Math.PI * 2); x.stroke();
     if(gp.hold[l] || gp.down[l]){ x.fillStyle = 'rgba(241,241,238,' + (gp.hold[l] ? 0.3 : 0.12) + ')'; x.beginPath(); x.arc(px, py, pr, 0, Math.PI * 2); x.fill(); }
     if(gp.flash[l] > 0){ x.fillStyle = 'rgba(241,241,238,' + gp.flash[l] * 0.4 + ')'; x.beginPath(); x.arc(px, py, pr, 0, Math.PI * 2); x.fill(); gp.flash[l] = Math.max(0, gp.flash[l] - 0.07); }
     if(L > 1){
-      gpArrow(x, px, py, R * 0.42, l % 4, 'rgba(241,241,238,' + (0.35 + bp * 0.3) + ')');
+      gpArrow(x, px, py, R * 0.42, l % 4, gp.down[l] || gp.hold[l] ? '#f1f1ee' : 'rgba(241,241,238,0.4)');
       x.fillStyle = 'rgba(241,241,238,0.55)'; x.font = '600 11px "IBM Plex Mono", monospace'; x.textAlign = 'center'; x.textBaseline = 'middle';
       const lab = gkLabel(gkeys[L][l]);
       if(!GP_TOUCH){ if(V) x.fillText(lab, px, py + R + 14); else x.fillText(lab, px - R - 16, py); }
