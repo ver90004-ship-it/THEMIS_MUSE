@@ -902,6 +902,10 @@
     .hdr-tabs{ overflow-x:auto; scrollbar-width:none; }
     .hdr-tabs::-webkit-scrollbar{ display:none; }
   }
+
+  .gd-inp{ margin-left:2px; }
+  .gd-inp button{ width:auto !important; padding:0 9px; font-size:0.76rem !important; font-family:'Noto Sans KR', sans-serif; margin-left:-1px; }
+  .gd-inp button[aria-pressed="true"]{ background:#f1f1ee; color:#0e0e10; border-color:#f1f1ee; }
 </style>
 </head>
 <body>
@@ -1160,7 +1164,7 @@
         <div class="gd-row"><span class="gd-lbl">함께할 가이드</span><div class="gd-partner" id="gdPartner"></div></div>
         <div class="gd-row"><span class="gd-lbl">설정</span>
           <div class="gd-set"><span class="gs">노트 속도 <button type="button" data-set="spd" data-d="-1" aria-label="속도 낮추기">−</button><b id="gdSpd">5</b><button type="button" data-set="spd" data-d="1" aria-label="속도 높이기">+</button></span>
-            <span class="sep"></span><span class="gs">싱크 <button type="button" data-set="off" data-d="-10" aria-label="싱크 앞당기기">−</button><b id="gdOff">0ms</b><button type="button" data-set="off" data-d="10" aria-label="싱크 늦추기">+</button></span><span class="sep"></span><button type="button" class="gk-open" id="gkOpen">⌨ 키 설정</button></div>
+            <span class="sep"></span><span class="gs">싱크 <button type="button" data-set="off" data-d="-10" aria-label="싱크 앞당기기">−</button><b id="gdOff">0ms</b><button type="button" data-set="off" data-d="10" aria-label="싱크 늦추기">+</button></span><span class="sep"></span><button type="button" class="gk-open" id="gkOpen">⌨ 키 설정</button><span class="gs gd-inp" id="gdInp">조작 <button type="button" data-inp="auto">자동</button><button type="button" data-inp="touch">터치</button><button type="button" data-inp="key">키보드</button></span></div>
         </div>
         <div class="gd-best" id="gdBest"></div>
         <button class="gd-start" type="button" id="gdStart">가이딩 시작</button>
@@ -3091,6 +3095,7 @@ function gdRender(){
       : '양손 8레인 — ' + gkHint(8, true))
     + '<br>긴 노트는 끝날 때까지 <b>누르고 있기</b>' + (GP_TOUCH ? '' : ' · ' + K('ESC') + ' 일시정지');
   $('#gkOpen').hidden = GP_TOUCH;
+  $$('#gdInp button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.inp === gpInput)));
   $('#gdSpd').textContent = gd.spd;
   $('#gdOff').textContent = (gd.off > 0 ? '+' : '') + gd.off + 'ms';
   const r = gd.best[t.id] && gd.best[t.id][gd.diff];
@@ -3110,6 +3115,7 @@ function gdSelect(i, gesture){
     if(!ok) $('#gdMeta').textContent = '음원을 불러오지 못했습니다.';
   });
 }
+$$('#gdInp button').forEach(b => b.addEventListener('click', () => { gpSetInput(b.dataset.inp); gdRender(); }));
 $$('.gd-set [data-set]').forEach(b => b.addEventListener('click', () => {
   const d = Number(b.dataset.d);
   if(b.dataset.set === 'spd'){ gd.spd = Math.max(1, Math.min(10, gd.spd + d)); store.set('themis-spd', gd.spd); }
@@ -3184,7 +3190,17 @@ function gpSay(ev, force){
 /* ── 플레이 ── */
 const W_JUDGE = { P:1, Gr:0.75, G:0.4, M:0 }, WIN = { P:0.045, Gr:0.09, G:0.135 };
 /* 레인 수: EASY 1 · NORMAL 4 · HARD 8 — 키보드는 키 설정대로, 터치 기기는 레인을 직접 탭 */
-const GP_TOUCH = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+/* 터치 감지: 데스크톱 모드로 보는 폰(삼성 인터넷 등)도 잡도록 넓게 + 사용자가 직접 고를 수 있게 */
+const GP_MQ = q => !!(window.matchMedia && window.matchMedia(q).matches);
+const GP_TOUCH_AUTO = (navigator.maxTouchPoints || 0) > 0 && (GP_MQ('(any-pointer: coarse)') || GP_MQ('(hover: none)') || ('ontouchstart' in window)
+  || /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser/i.test(navigator.userAgent));
+let gpInput = store.get('themis-input', 'auto');   /* auto | touch | key */
+let GP_TOUCH = gpInput === 'touch' || (gpInput === 'auto' && GP_TOUCH_AUTO);
+function gpSetInput(v){ gpInput = v; store.set('themis-input', v); GP_TOUCH = v === 'touch' || (v === 'auto' && GP_TOUCH_AUTO); }
+/* 자동일 때: 실제로 손가락으로 누르면 터치 모드로 */
+document.addEventListener('pointerdown', (e) => {
+  if(gpInput === 'auto' && e.pointerType === 'touch' && !GP_TOUCH){ GP_TOUCH = true; if(!$('#vGuide').hidden && $('#gp').hidden) gdRender(); }
+}, true);
 const GP_ARROW = ['←', '↓', '↑', '→'];
 /* 키 설정: 레인 수별 키 목록 (e.code 기준) */
 const GK_DEF = { 1:['Space','KeyJ'], 4:['ArrowLeft','ArrowDown','ArrowUp','ArrowRight'], 8:['KeyA','KeyS','KeyW','KeyD','ArrowLeft','ArrowDown','ArrowUp','ArrowRight'] };
@@ -3458,7 +3474,7 @@ function gpDraw(t){
   const L = gp.L, TW = GP_TOUCH && L > 1;
   const V = H > W * 1.1 || TW;   /* 세로 화면·터치 다중레인: 위에서 떨어지는 레인 */
   const LS = L === 1 ? 60
-    : TW ? Math.min(L === 4 ? 110 : 80, (W - 16) / (L + (L === 8 ? 0.5 : 0)))
+    : TW ? Math.min(L === 4 ? 170 : 120, (W - 16) / (L + (L === 8 ? 0.5 : 0)))
     : L === 4 ? (V ? Math.min(70, W / 5) : Math.min(60, H / 8)) : (V ? Math.min(56, W / 9.5) : Math.min(50, H / 10.5));
   const HG = L === 8 ? LS * 0.5 : 0;   /* 왼손·오른손 레인 사이 틈 */
   const cy = V ? H * (TW ? 0.78 : 0.7) : H * 0.56, hx = V ? W / 2 : Math.max(64, W * 0.17), amp = Math.min(H * 0.18, 110);
@@ -3507,7 +3523,7 @@ function gpDraw(t){
   if(V){ x.moveTo(Math.min(W * 0.12, hx - half - 20), cy); x.lineTo(Math.max(W * 0.88, hx + half + 20), cy); }
   else { x.moveTo(hx, Math.min(cy - H * 0.32, cy - half - 30)); x.lineTo(hx, Math.max(cy + H * 0.32, cy + half + 30)); }
   x.stroke();
-  const R = L === 8 ? Math.min(19, LS * 0.4) : L > 1 ? 21 : 24, NR = L === 8 ? Math.min(16, LS * 0.33) : L > 1 ? 17 : 18;
+  const R = TW ? Math.min(34, LS * 0.38) : L === 8 ? Math.min(19, LS * 0.4) : L > 1 ? 21 : 24, NR = TW ? Math.min(28, LS * 0.31) : L === 8 ? Math.min(16, LS * 0.33) : L > 1 ? 17 : 18;
   for(let l = 0; l < L; l++){
     const [px, py] = hit(l);
     x.strokeStyle = 'rgba(241,241,238,0.25)'; x.lineWidth = 1;
@@ -3544,7 +3560,7 @@ function gpDraw(t){
       const [sx, sy] = held ? hit(l) : [nx, ny];
       x.fillStyle = n.hit === 'M' ? 'rgba(241,241,238,0.08)' : held ? 'rgba(241,241,238,0.5)' : 'rgba(241,241,238,0.22)';
       x.strokeStyle = n.hit === 'M' ? 'rgba(241,241,238,0.3)' : '#f1f1ee'; x.lineWidth = 1.5;
-      const bw = L === 8 ? Math.min(18, LS * 0.36) : L > 1 ? 20 : 24;
+      const bw = TW ? Math.min(30, LS * 0.34) : L === 8 ? Math.min(18, LS * 0.36) : L > 1 ? 20 : 24;
       if(V){ x.fillRect(sx - bw / 2, ey, bw, Math.max(0, sy - ey)); x.strokeRect(sx - bw / 2, ey, bw, Math.max(0, sy - ey)); }
       else { x.fillRect(sx, sy - bw / 2, Math.max(0, ex - sx), bw); x.strokeRect(sx, sy - bw / 2, Math.max(0, ex - sx), bw); }
       x.fillStyle = '#0b0b0c'; x.beginPath(); x.arc(ex, ey, bw / 2, 0, Math.PI * 2); x.fill(); x.stroke();
